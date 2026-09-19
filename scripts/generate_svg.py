@@ -88,16 +88,15 @@ def generate():
         [],
         # Line 12-13: Hobbies
         [(C["yellow"], True, "Hobbies.Software: "), (C["white"], False, "Robotics, Computer Vision, Web-Dev")],
-        [(C["yellow"], True, "Hobbies.Normal: "), (C["white"], False, "Reading, Watching Anime")],
+        [(C["yellow"], True, "Hobbies.Personal: "), (C["white"], False, "Reading, Watching Anime")],
         # Line 14: empty
         [],
         # Line 15: Contact section header
         [(C["yellow"], True, "— Contact —————————————————————————————————")],
         # Line 16-19: Contact info
-        [(C["green"], True, "Email.Personal: "), (C["white"], False, "......... [placeholder]")],
-        [(C["green"], True, "Email.Work: "), (C["white"], False, "............. [placeholder]")],
-        [(C["green"], True, "LinkedIn: "), (C["white"], False, "............... [placeholder]")],
-        [(C["green"], True, "Discord: "), (C["white"], False, "................ [placeholder]")],
+        [(C["green"], True, "Email.Personal: "), (C["white"], False, "brenandapamudya178@gmail.com")],
+        [(C["green"], True, "Email.Work: "), (C["white"], False, "5003251085@student.its.ac.id")],
+        [(C["green"], True, "LinkedIn: "), (C["white"], False, "Brenanda Caesa Pamudya")],
         # Line 20: empty
         [],
         # Line 21: GitHub Stats section header

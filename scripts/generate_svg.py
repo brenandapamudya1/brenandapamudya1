@@ -102,9 +102,9 @@ def generate():
         # Line 21: GitHub Stats section header
         [(C["yellow"], True, "— GitHub Stats ————————————————————————————")],
         # Line 22-26: Stats
-        [(C["green"], True, "Repos: "), (C["white"], False, "................ [placeholder]")],
-        [(C["green"], True, "Commits: "), (C["white"], False, ".............. [placeholder]")],
-        [(C["green"], True, "Lines of Code: "), (C["white"], False, "........ [placeholder]")],
+        [(C["green"], True, "Repos: "), (C["white"], False, "[placeholder]")],
+        [(C["green"], True, "Commits: "), (C["white"], False, "[placeholder]")],
+        [(C["green"], True, "Lines of Code: "), (C["white"], False, "[placeholder]")],
         # Line 27: empty
         [],
     ]
@@ -149,19 +149,31 @@ def generate():
         parts.append(f'  <text x="{padding_x}" y="{y:.1f}" xml:space="preserve" font-family="\'JetBrains Mono\', \'Cascadia Code\', \'Fira Code\', \'SF Mono\', Consolas, monospace" font-size="{ascii_font_size}" fill="{C["cyan"]}">{escape(line)}</text>')
 
     # Info lines
+    # Label left-anchored, value flush-right (true neofetch style)
     info_x = padding_x + ascii_col_width + gap
+    value_right_x = svg_width - 20
+    mono = "font-family=\"'JetBrains Mono', 'Cascadia Code', 'Fira Code', 'SF Mono', Consolas, monospace\""
     for i, segments in enumerate(info_lines):
         if not segments:
             continue
         y = padding_top + i * line_height + font_size
-        
-        # Build text element with tspan children
-        text_elem = f'  <text x="{info_x}" y="{y:.1f}" xml:space="preserve" font-family="\'JetBrains Mono\', \'Cascadia Code\', \'Fira Code\', \'SF Mono\', Consolas, monospace" font-size="{font_size}">'
-        
+
+        # Label: value lines -> label left, value right-aligned
+        if len(segments) == 2:
+            (lc, lb, label), (vc, vb, value) = segments
+            lw = ' font-weight="700"' if lb else ''
+            vw = ' font-weight="700"' if vb else ''
+            parts.append(f'  <text x="{info_x}" y="{y:.1f}" xml:space="preserve" {mono} font-size="{font_size}"><tspan fill="{lc}"{lw}>{escape(label)}</tspan></text>')
+            parts.append(f'  <text x="{value_right_x}" y="{y:.1f}" text-anchor="end" xml:space="preserve" {mono} font-size="{font_size}"><tspan fill="{vc}"{vw}>{escape(value)}</tspan></text>')
+            continue
+
+        # Header / separator / section titles -> single left-anchored text
+        text_elem = f'  <text x="{info_x}" y="{y:.1f}" xml:space="preserve" {mono} font-size="{font_size}">'
+
         for color, bold, content in segments:
             weight = ' font-weight="700"' if bold else ''
             text_elem += f'<tspan fill="{color}"{weight}>{escape(content)}</tspan>'
-        
+
         text_elem += '</text>'
         parts.append(text_elem)
 

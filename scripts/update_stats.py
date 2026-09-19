@@ -5,6 +5,7 @@ Called by GitHub Actions workflow.
 """
 import os
 import json
+import time
 import requests
 
 GITHUB_USERNAME = os.environ.get("GITHUB_USERNAME", "brenandapamudya1")
@@ -62,6 +63,34 @@ def fetch_github_stats():
 
     # Count contributed repos (forked repos count as contributed)
     stats["contributed_repos"] = sum(1 for r in all_repos if r.get("fork", False))
+
+    # Estimate Lines of Code: sum (additions - deletions) from
+    # code_frequency stats across owned (non-fork) repos.
+    # Note: the stats endpoint returns 202 while GitHub computes,
+    # so retry pending repos in rounds with backoff.
+    loc = 0
+    pending = [r.get("name", "") for r in all_repos if not r.get("fork", False)]
+    for _ in range(5):
+        if not pending:
+            break
+        still_pending = []
+        for name in pending:
+            cf_resp = requests.get(
+                f"https://api.github.com/repos/{GITHUB_USERNAME}/{name}/stats/code_frequency",
+                headers=headers,
+            )
+            if cf_resp.status_code == 202:
+                still_pending.append(name)
+                continue
+            if cf_resp.status_code == 200:
+                weeks = cf_resp.json()
+                if isinstance(weeks, list):
+                    for _ts, additions, deletions in weeks:
+                        loc += (additions or 0) - (deletions or 0)
+        pending = still_pending
+        if pending:
+            time.sleep(10)
+    stats["lines_of_code"] = loc
 
     # Estimate total commits (from events API - limited to recent 300)
     events_resp = requests.get(
@@ -176,7 +205,7 @@ def generate_svg(stats):
         [(C["green"], True, "Commits: "), (C["white"], False, f".............. {stats['commits']}")],
         [(C["green"], True, "Stars: "), (C["white"], False, f"................ {stats['stars']}")],
         [(C["green"], True, "Followers: "), (C["white"], False, f"............ {stats['followers']}")],
-        [(C["green"], True, "Lines of Code: "), (C["white"], False, "........ [placeholder]")],
+        [(C["green"], True, "Lines of Code: "), (C["white"], False, f"........ {stats['lines_of_code']:,}")],
         [],
     ]
 
@@ -232,7 +261,7 @@ def generate_svg(stats):
 if __name__ == "__main__":
     print("🔍 Fetching GitHub stats...")
     stats = fetch_github_stats()
-    print(f"   Repos: {stats['repos']}, Stars: {stats['stars']}, Followers: {stats['followers']}")
+    print(f"   Repos: {stats['repos']}, Stars: {stats['stars']}, Followers: {stats['followers']}, LoC: {stats['lines_of_code']:,}")
     
     print("🎨 Generating SVG...")
     svg = generate_svg(stats)

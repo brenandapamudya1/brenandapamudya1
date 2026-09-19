@@ -81,9 +81,9 @@ def generate():
         # Line 7: empty
         [],
         # Line 8-10: Languages
-        [(C["yellow"], True, "Languages.Programming: "), (C["white"], False, ".. [placeholder]")],
-        [(C["yellow"], True, "Languages.Computer: "), (C["white"], False, "..... [placeholder]")],
-        [(C["yellow"], True, "Languages.Real: "), (C["white"], False, "......... [placeholder]")],
+        [(C["yellow"], True, "Languages.Programming: "), (C["white"], False, "Python, C++, R")],
+        [(C["yellow"], True, "Languages.Computer: "), (C["white"], False, "HTML, CSS, JSON, YAML")],
+        [(C["yellow"], True, "Languages.Real: "), (C["white"], False, "English, Indonesia")],
         # Line 11: empty
         [],
         # Line 12-13: Hobbies

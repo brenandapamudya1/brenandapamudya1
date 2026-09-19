@@ -77,7 +77,7 @@ def generate():
         [(C["green"], True, "Uptime: "), (C["white"], False, "19 years, 9 months, 22 days (7227 days)")],
         [(C["green"], True, "Host: "), (C["white"], False, "Institut Teknologi Sepuluh Nopember, Surabaya")],
         [(C["green"], True, "Kernel: "), (C["white"], False, "Linux x86_64")],
-        [(C["green"], True, "IDE: "), (C["white"], False, "................... [placeholder]")],
+        [(C["green"], True, "IDE: "), (C["white"], False, "VSCode 1.125.0")],
         # Line 7: empty
         [],
         # Line 8-10: Languages
@@ -88,7 +88,7 @@ def generate():
         [],
         # Line 12-13: Hobbies
         [(C["yellow"], True, "Hobbies.Software: "), (C["white"], False, "Robotics, Computer Vision, Web-Dev")],
-        [(C["yellow"], True, "Hobbies.Normal: "), (C["white"], False, "Reading, Watchin Anime")],
+        [(C["yellow"], True, "Hobbies.Normal: "), (C["white"], False, "Reading, Watching Anime")],
         # Line 14: empty
         [],
         # Line 15: Contact section header

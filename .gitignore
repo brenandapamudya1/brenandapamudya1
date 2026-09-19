@@ -30,3 +30,11 @@ Thumbs.db
 *.tmp
 *.bak
 *.log
+
+# Sumber gambar & ASCII lokal (README hanya butuh neofetch.svg,
+# art final sudah tertanam di scripts/)
+*.png
+*.jpg
+*.jpeg
+*.webp
+ascii_*.txt

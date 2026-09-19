@@ -88,7 +88,7 @@ def generate():
         [],
         # Line 12-13: Hobbies
         [(C["yellow"], True, "Hobbies.Software: "), (C["white"], False, "Robotics, Computer Vision, Web-Dev")],
-        [(C["yellow"], True, "Hobbies.Hardware: "), (C["white"], False, "....... [placeholder]")],
+        [(C["yellow"], True, "Hobbies.Normal: "), (C["white"], False, "Reading, Watchin Anime")],
         # Line 14: empty
         [],
         # Line 15: Contact section header

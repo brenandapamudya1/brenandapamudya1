@@ -164,7 +164,7 @@ def generate_svg(stats):
         [(C["yellow"], True, "Languages.Real: "), (C["white"], False, "English, Indonesia")],
         [],
         [(C["yellow"], True, "Hobbies.Software: "), (C["white"], False, "Robotics, Computer Vision, Web-Dev")],
-        [(C["yellow"], True, "Hobbies.Hardware: "), (C["white"], False, "....... [placeholder]")],
+        [(C["yellow"], True, "Hobbies.Normal: "), (C["white"], False, "Reading, Watchin Anime")],
         [],
         [(C["yellow"], True, "— Contact —————————————————————————————————")],
         [(C["green"], True, "Email.Personal: "), (C["white"], False, "......... [placeholder]")],

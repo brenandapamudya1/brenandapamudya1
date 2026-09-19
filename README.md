@@ -12,7 +12,7 @@
 
 <div align="center">
   
-  <img src="neofetch.svg" alt="Neofetch-style profile" width="850"/>
+  <img src="neofetch.svg" alt="Neofetch-style profile" width="1000"/>
 
 </div>
 

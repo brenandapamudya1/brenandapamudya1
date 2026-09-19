@@ -1,0 +1,32 @@
+# Python cache & env
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+
+# Secrets / keys (jangan pernah push token)
+*.pem
+*.key
+*.token
+
+# Model & binary besar (tidak dibutuhkan Action)
+*.pt
+*.pth
+*.onnx
+*.bin
+
+# Sampah OS & editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*~
+*.swp
+*.swo
+
+# Temp & log
+*.tmp
+*.bak
+*.log

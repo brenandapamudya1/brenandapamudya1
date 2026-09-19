@@ -27,6 +27,7 @@ jobs:
       - name: Fetch GitHub Stats & Update SVG
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STATS_TOKEN: ${{ secrets.STATS_TOKEN }}
           GITHUB_USERNAME: brenandapamudya1
         run: python3 scripts/update_stats.py
       

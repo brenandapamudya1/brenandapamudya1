@@ -6,6 +6,7 @@ Called by GitHub Actions workflow.
 import os
 import json
 import requests
+from datetime import datetime, timezone
 
 GITHUB_USERNAME = os.environ.get("GITHUB_USERNAME", "brenandapamudya1")
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")
@@ -63,15 +64,50 @@ def fetch_github_stats():
     # Count contributed repos (forked repos count as contributed)
     stats["contributed_repos"] = sum(1 for r in all_repos if r.get("fork", False))
 
-    # Fixed Lines of Code (manual estimate).
-    # Hardcoded so the daily Action keeps this value instead of
-    # estimating it from the API (rate-limited and unreliable).
+    # Manual baselines: true values including private repos, which the
+    # public API can't see. Kept unless a full-accuracy refresh succeeds.
     stats["lines_of_code"] = 70654
-
-    # Fixed total commits (manual count).
-    # Hardcoded because the search API undercounts (author-email
-    # linking gaps), so the daily Action keeps this value instead.
     stats["commits"] = 388
+    stats["repos_total"] = 25
+    stats["repos_contrib"] = 9
+
+    # Full-accuracy refresh via GraphQL, only with STATS_TOKEN (a PAT that
+    # can see private repos). GITHUB_TOKEN can't, so without STATS_TOKEN we
+    # keep the manual baselines instead of trusting incomplete data.
+    # Note: totalContributions counts all contribution types (commits + PRs
+    # + issues + reviews), so it may read slightly above pure commits.
+    pat = os.environ.get("STATS_TOKEN", "")
+    if pat:
+        try:
+            now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+            gql_headers = {"Authorization": f"bearer {pat}"}
+            api = "https://api.github.com/graphql"
+            commits_q = """
+            query($login: String!, $from: DateTime!, $to: DateTime!) {
+                user(login: $login) {
+                    contributionsCollection(from: $from, to: $to) {
+                        contributionCalendar { totalContributions }
+                    }
+                }
+            }"""
+            repos_q = """
+            query($login: String!) {
+                user(login: $login) {
+                    owned: repositories(ownerAffiliations: [OWNER]) { totalCount }
+                    involved: repositories(ownerAffiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER]) { totalCount }
+                }
+            }"""
+            cr = requests.post(api, json={"query": commits_q, "variables": {"login": GITHUB_USERNAME, "from": "2008-01-01T00:00:00Z", "to": now}}, headers=gql_headers, timeout=30)
+            total = cr.json()["data"]["user"]["contributionsCollection"]["contributionCalendar"]["totalContributions"]
+            stats["commits"] = int(total)
+            rr = requests.post(api, json={"query": repos_q, "variables": {"login": GITHUB_USERNAME}}, headers=gql_headers, timeout=30)
+            owned = rr.json()["data"]["user"]["owned"]["totalCount"]
+            involved = rr.json()["data"]["user"]["involved"]["totalCount"]
+            stats["repos_total"] = int(owned)
+            stats["repos_contrib"] = int(involved) - int(owned)
+            print(f"   GraphQL refresh ok: commits={stats['commits']}, repos={stats['repos_total']} (contrib {stats['repos_contrib']})")
+        except Exception as e:
+            print(f"   GraphQL refresh failed ({e}), keeping manual baselines")
 
     return stats
 
@@ -143,7 +179,7 @@ def generate_svg(stats):
     uptime_str = "19 years, 9 months, 22 days (7227 days)"
     # Fixed repos count (manual count, includes private repos
     # invisible to the public API). Daily Action keeps this value.
-    repos_str = "25 (Contributed: 9)"
+    repos_str = f"{stats['repos_total']:,} (Contributed: {stats['repos_contrib']:,})"
     
     # Dynamic info lines
     info_lines = [
@@ -169,7 +205,7 @@ def generate_svg(stats):
         [],
         [(C["yellow"], True, "— GitHub Stats ————————————————————————————")],
         [(C["green"], True, "Repos: "), (C["white"], False, f"{repos_str}")],
-        [(C["green"], True, "Commits: "), (C["white"], False, f"{stats['commits']}")],
+        [(C["green"], True, "Commits: "), (C["white"], False, f"{stats['commits']:,}")],
         [(C["green"], True, "Lines of Code: "), (C["white"], False, f"{stats['lines_of_code']:,}")],
         [],
     ]
@@ -245,7 +281,7 @@ def generate_svg(stats):
 if __name__ == "__main__":
     print("🔍 Fetching GitHub stats...")
     stats = fetch_github_stats()
-    print(f"   Repos: {stats['repos']}, Stars: {stats['stars']}, Followers: {stats['followers']}, LoC: {stats['lines_of_code']:,}")
+    print(f"   Repos: {stats['repos']}, Stars: {stats['stars']}, Followers: {stats['followers']}, LoC: {stats['lines_of_code']:,}, Commits: {stats['commits']:,}, Owned: {stats['repos_total']} (contrib {stats['repos_contrib']})")
     
     print("🎨 Generating SVG...")
     svg = generate_svg(stats)

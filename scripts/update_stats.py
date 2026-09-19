@@ -141,7 +141,9 @@ def generate_svg(stats):
     # Hardcoded so the daily Action keeps this value instead of
     # recomputing it from the GitHub account age.
     uptime_str = "19 years, 9 months, 22 days (7227 days)"
-    repos_str = f"{stats['repos']} (Contributed: {stats['contributed_repos']})"
+    # Fixed repos count (manual count, includes private repos
+    # invisible to the public API). Daily Action keeps this value.
+    repos_str = "25 (Contributed: 9)"
     
     # Dynamic info lines
     info_lines = [

@@ -73,8 +73,8 @@ def generate():
         # Line 1: separator
         [(C["gray"], False, "——————————————————————————————————————————————")],
         # Line 2-6: System info
-        [(C["green"], True, "OS: "), (C["white"], False, ".................. [placeholder]")],
-        [(C["green"], True, "Uptime: "), (C["white"], False, "................ [placeholder]")],
+        [(C["green"], True, "OS: "), (C["white"], False, "Ubuntu 22.04, Windows 11")],
+        [(C["green"], True, "Uptime: "), (C["white"], False, "19 years, 9 months, 22 days (7227 days)")],
         [(C["green"], True, "Host: "), (C["white"], False, ".................. [placeholder]")],
         [(C["green"], True, "Kernel: "), (C["white"], False, "................ [placeholder]")],
         [(C["green"], True, "IDE: "), (C["white"], False, "................... [placeholder]")],

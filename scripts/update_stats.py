@@ -6,7 +6,6 @@ Called by GitHub Actions workflow.
 import os
 import json
 import requests
-from datetime import datetime, timezone
 
 GITHUB_USERNAME = os.environ.get("GITHUB_USERNAME", "brenandapamudya1")
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")
@@ -41,15 +40,6 @@ def fetch_github_stats():
         stats["repos"] = user_data.get("public_repos", 0)
         stats["followers"] = user_data.get("followers", 0)
         stats["following"] = user_data.get("following", 0)
-        created_at = user_data.get("created_at", "")
-        if created_at:
-            created = datetime.fromisoformat(created_at.replace("Z", "+00:00"))
-            now = datetime.now(timezone.utc)
-            delta = now - created
-            years = delta.days // 365
-            months = (delta.days % 365) // 30
-            days = delta.days % 30
-            stats["uptime"] = f"{years} years, {months} months, {days} days"
 
     # Fetch repos and count stars
     page = 1
@@ -153,15 +143,17 @@ def generate_svg(stats):
         "orange": "#f0883e",
     }
 
-    # Build stats strings
-    uptime_str = stats.get("uptime", "[placeholder]")
+    # Fixed uptime (7227 days = 19 years, 9 months, 22 days).
+    # Hardcoded so the daily Action keeps this value instead of
+    # recomputing it from the GitHub account age.
+    uptime_str = "19 years, 9 months, 22 days (7227 days)"
     repos_str = f"{stats['repos']} (Contributed: {stats['contributed_repos']})"
     
     # Dynamic info lines
     info_lines = [
         [(C["green"], True, "brenandapamudya1"), (C["white"], True, "@"), (C["green"], True, "github")],
         [(C["gray"], False, "——————————————————————————————————————————————")],
-        [(C["green"], True, "OS: "), (C["white"], False, ".................. [placeholder]")],
+        [(C["green"], True, "OS: "), (C["white"], False, "Ubuntu 22.04, Windows 11")],
         [(C["green"], True, "Uptime: "), (C["white"], False, f"................ {uptime_str}")],
         [(C["green"], True, "Host: "), (C["white"], False, ".................. [placeholder]")],
         [(C["green"], True, "Kernel: "), (C["white"], False, "................ [placeholder]")],

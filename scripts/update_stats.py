@@ -206,22 +206,28 @@ def generate_svg(stats):
         y = padding_top + i * ascii_line_height + ascii_font_size
         parts.append(f'  <text x="{padding_x}" y="{y:.1f}" xml:space="preserve" {font_attr} font-size="{ascii_font_size}" fill="{C["cyan"]}">{escape(line)}</text>')
 
-    # Info
-    # Label left-anchored, value flush-right (true neofetch style)
+    # Info: label + dot leaders + value, fixed total width so all
+    # values end at the same column (technique adapted from
+    # references.py::justify_format).
     info_x = padding_x + ascii_col_width + gap
-    value_right_x = svg_width - 20
+    FIELD_WIDTH = 66
     for i, segments in enumerate(info_lines):
         if not segments:
             continue
         y = padding_top + i * line_height + font_size
 
-        # Label: value lines -> label left, value right-aligned
+        # Label: value lines -> label + dots + value, values end aligned
         if len(segments) == 2:
             (lc, lb, label), (vc, vb, value) = segments
+            dots = '.' * max(1, FIELD_WIDTH - len(label) - len(value))
             lw = ' font-weight="700"' if lb else ''
             vw = ' font-weight="700"' if vb else ''
-            parts.append(f'  <text x="{info_x}" y="{y:.1f}" xml:space="preserve" {font_attr} font-size="{font_size}"><tspan fill="{lc}"{lw}>{escape(label)}</tspan></text>')
-            parts.append(f'  <text x="{value_right_x}" y="{y:.1f}" text-anchor="end" xml:space="preserve" {font_attr} font-size="{font_size}"><tspan fill="{vc}"{vw}>{escape(value)}</tspan></text>')
+            parts.append(
+                f'  <text x="{info_x}" y="{y:.1f}" xml:space="preserve" {font_attr} font-size="{font_size}">'
+                f'<tspan fill="{lc}"{lw}>{escape(label)}</tspan>'
+                f'<tspan fill="{C["gray"]}">{dots}</tspan>'
+                f'<tspan fill="{vc}"{vw}>{escape(value)}</tspan></text>'
+            )
             continue
 
         # Header / separator / section titles -> single left-anchored text

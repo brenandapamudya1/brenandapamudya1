@@ -31,6 +31,9 @@ Thumbs.db
 *.bak
 *.log
 
+# File referensi pihak ketiga (jangan push)
+references.py
+
 # Sumber gambar & ASCII lokal (README hanya butuh neofetch.svg,
 # art final sudah tertanam di scripts/)
 *.png

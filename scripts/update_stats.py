@@ -279,15 +279,15 @@ def generate_svg(stats):
 
 
 if __name__ == "__main__":
-    print("🔍 Fetching GitHub stats...")
+    print("Fetching GitHub stats...")
     stats = fetch_github_stats()
     print(f"   Repos: {stats['repos']}, Stars: {stats['stars']}, Followers: {stats['followers']}, LoC: {stats['lines_of_code']:,}, Commits: {stats['commits']:,}, Owned: {stats['repos_total']} (contrib {stats['repos_contrib']})")
     
-    print("🎨 Generating SVG...")
+    print("Generating SVG...")
     svg = generate_svg(stats)
     
     output = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "neofetch.svg")
     with open(output, "w", encoding="utf-8") as f:
         f.write(svg)
     
-    print(f"✅ SVG written to {output}")
+    print(f"SVG written to {output}")

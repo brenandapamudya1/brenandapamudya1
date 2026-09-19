@@ -193,5 +193,5 @@ if __name__ == "__main__":
     output = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "neofetch.svg")
     with open(output, "w", encoding="utf-8") as f:
         f.write(svg)
-    print(f"✅ SVG written to {output}")
+    print(f"SVG written to {output}")
     print(f"   File size: {len(svg):,} bytes")

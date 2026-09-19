@@ -156,7 +156,7 @@ def generate_svg(stats):
         [(C["green"], True, "OS: "), (C["white"], False, "Ubuntu 22.04, Windows 11")],
         [(C["green"], True, "Uptime: "), (C["white"], False, f"................ {uptime_str}")],
         [(C["green"], True, "Host: "), (C["white"], False, "Institut Teknologi Sepuluh Nopember, Surabaya")],
-        [(C["green"], True, "Kernel: "), (C["white"], False, "6.8.0-138-generic")],
+        [(C["green"], True, "Kernel: "), (C["white"], False, "Linux x86_64")],
         [(C["green"], True, "IDE: "), (C["white"], False, "................... [placeholder]")],
         [],
         [(C["yellow"], True, "Languages.Programming: "), (C["white"], False, ".. [placeholder]")],

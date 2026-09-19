@@ -76,7 +76,7 @@ def generate():
         [(C["green"], True, "OS: "), (C["white"], False, "Ubuntu 22.04, Windows 11")],
         [(C["green"], True, "Uptime: "), (C["white"], False, "19 years, 9 months, 22 days (7227 days)")],
         [(C["green"], True, "Host: "), (C["white"], False, "Institut Teknologi Sepuluh Nopember, Surabaya")],
-        [(C["green"], True, "Kernel: "), (C["white"], False, "6.8.0-138-generic")],
+        [(C["green"], True, "Kernel: "), (C["white"], False, "Linux x86_64")],
         [(C["green"], True, "IDE: "), (C["white"], False, "................... [placeholder]")],
         # Line 7: empty
         [],

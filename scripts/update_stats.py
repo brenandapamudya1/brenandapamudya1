@@ -68,26 +68,10 @@ def fetch_github_stats():
     # estimating it from the API (rate-limited and unreliable).
     stats["lines_of_code"] = 70654
 
-    # Total commits via commit search API (single call, true all-time total).
-    # Falls back to the recent-push-events estimate if search is unavailable.
-    search_resp = requests.get(
-        f"https://api.github.com/search/commits?q=author:{GITHUB_USERNAME}",
-        headers={**headers, "Accept": "application/vnd.github.cloak-preview"},
-    )
-    if search_resp.status_code == 200:
-        stats["commits"] = search_resp.json().get("total_count", 0)
-    else:
-        events_resp = requests.get(
-            f"https://api.github.com/users/{GITHUB_USERNAME}/events?per_page=100",
-            headers=headers,
-        )
-        if events_resp.status_code == 200:
-            events = events_resp.json()
-            push_events = [e for e in events if e.get("type") == "PushEvent"]
-            stats["commits"] = sum(
-                len(e.get("payload", {}).get("commits", []))
-                for e in push_events
-            )
+    # Fixed total commits (manual count).
+    # Hardcoded because the search API undercounts (author-email
+    # linking gaps), so the daily Action keeps this value instead.
+    stats["commits"] = 388
 
     return stats
 

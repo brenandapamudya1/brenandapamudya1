@@ -104,8 +104,6 @@ def generate():
         # Line 22-26: Stats
         [(C["green"], True, "Repos: "), (C["white"], False, "................ [placeholder]")],
         [(C["green"], True, "Commits: "), (C["white"], False, ".............. [placeholder]")],
-        [(C["green"], True, "Stars: "), (C["white"], False, "................ [placeholder]")],
-        [(C["green"], True, "Followers: "), (C["white"], False, "............ [placeholder]")],
         [(C["green"], True, "Lines of Code: "), (C["white"], False, "........ [placeholder]")],
         # Line 27: empty
         [],

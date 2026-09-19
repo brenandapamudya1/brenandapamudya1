@@ -168,8 +168,6 @@ def generate_svg(stats):
         [(C["yellow"], True, "— GitHub Stats ————————————————————————————")],
         [(C["green"], True, "Repos: "), (C["white"], False, f"................ {repos_str}")],
         [(C["green"], True, "Commits: "), (C["white"], False, f".............. {stats['commits']}")],
-        [(C["green"], True, "Stars: "), (C["white"], False, f"................ {stats['stars']}")],
-        [(C["green"], True, "Followers: "), (C["white"], False, f"............ {stats['followers']}")],
         [(C["green"], True, "Lines of Code: "), (C["white"], False, f"........ {stats['lines_of_code']:,}")],
         [],
     ]

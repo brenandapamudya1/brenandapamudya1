@@ -87,7 +87,7 @@ def generate():
         # Line 11: empty
         [],
         # Line 12-13: Hobbies
-        [(C["yellow"], True, "Hobbies.Software: "), (C["white"], False, "....... [placeholder]")],
+        [(C["yellow"], True, "Hobbies.Software: "), (C["white"], False, "Robotics, Computer Vision, Web-Dev")],
         [(C["yellow"], True, "Hobbies.Hardware: "), (C["white"], False, "....... [placeholder]")],
         # Line 14: empty
         [],

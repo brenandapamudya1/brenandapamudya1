@@ -5,7 +5,6 @@ Called by GitHub Actions workflow.
 """
 import os
 import json
-import time
 import requests
 
 GITHUB_USERNAME = os.environ.get("GITHUB_USERNAME", "brenandapamudya1")
@@ -64,33 +63,10 @@ def fetch_github_stats():
     # Count contributed repos (forked repos count as contributed)
     stats["contributed_repos"] = sum(1 for r in all_repos if r.get("fork", False))
 
-    # Estimate Lines of Code: sum (additions - deletions) from
-    # code_frequency stats across owned (non-fork) repos.
-    # Note: the stats endpoint returns 202 while GitHub computes,
-    # so retry pending repos in rounds with backoff.
-    loc = 0
-    pending = [r.get("name", "") for r in all_repos if not r.get("fork", False)]
-    for _ in range(5):
-        if not pending:
-            break
-        still_pending = []
-        for name in pending:
-            cf_resp = requests.get(
-                f"https://api.github.com/repos/{GITHUB_USERNAME}/{name}/stats/code_frequency",
-                headers=headers,
-            )
-            if cf_resp.status_code == 202:
-                still_pending.append(name)
-                continue
-            if cf_resp.status_code == 200:
-                weeks = cf_resp.json()
-                if isinstance(weeks, list):
-                    for _ts, additions, deletions in weeks:
-                        loc += (additions or 0) - (deletions or 0)
-        pending = still_pending
-        if pending:
-            time.sleep(10)
-    stats["lines_of_code"] = loc
+    # Fixed Lines of Code (manual estimate).
+    # Hardcoded so the daily Action keeps this value instead of
+    # estimating it from the API (rate-limited and unreliable).
+    stats["lines_of_code"] = 70654
 
     # Estimate total commits (from events API - limited to recent 300)
     events_resp = requests.get(

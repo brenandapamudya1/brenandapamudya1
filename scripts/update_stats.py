@@ -9,6 +9,8 @@ import time
 import requests
 from datetime import datetime, timezone
 
+from loc_counter import compute as compute_loc
+
 GITHUB_USERNAME = os.environ.get("GITHUB_USERNAME", "brenandapamudya1")
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")
 
@@ -146,6 +148,13 @@ def fetch_github_stats():
             print(f"   repos refresh ok: {owned} (contrib {stats['repos_contrib']})")
         except Exception as e:
             print(f"   repos refresh failed ({e}), keeping baselines")
+
+        try:
+            ladd, ldel, lnet = compute_loc(GITHUB_USERNAME, pat, progress=print)
+            stats["lines_of_code"] = int(lnet)
+            print(f"   loc refresh ok: +{ladd:,} / -{ldel:,} = {lnet:,}")
+        except Exception as e:
+            print(f"   loc refresh failed ({e}), keeping baseline {stats['lines_of_code']:,}")
 
     return stats
 

@@ -112,25 +112,45 @@ def poly(points, fill, opacity=None):
     return f'<polygon points="{p}" fill="{fill}"{op}/>'
 
 
-def windows(x0, x1, y0, y1, seed, lit_prob=0.45):
-    """Axis-aligned window grid inside a face bbox. Deterministic per seed."""
+def windows_face(p0, p1, hgt, seed, lit_prob=0.45):
+    """Window grid on one wall, as parallelograms following the wall slant.
+
+    p0 -> p1 runs along the TOP edge of the wall (e.g. upper-left to
+    upper-right corner); windows hang straight down from it, so vertical
+    edges stay perpendicular while horizontal edges stay parallel to the
+    wall slant. 3.5px side margins, 4px top/bottom margins; faces too
+    short for one full window row are left plain so nothing overflows.
+    Deterministic per seed. Window ratio ~1:1.5 (wider than tall is
+    avoided: ww x wh below).
+    """
+    import math
+    ux, uy = p1[0] - p0[0], p1[1] - p0[1]
+    edge = math.hypot(ux, uy)
+    ux, uy = ux / edge, uy / edge
+    m, gap, wh, vgap = 3.5, 2.0, 7.5, 4.0
+    usable_w, usable_h = edge - 2 * m, hgt - 2 * 4
+    cols = 2
+    ww = (usable_w - gap) / cols
+    rows = int((usable_h + vgap) // (wh + vgap))
+    if ww < 3 or rows < 1:
+        return ""  # too small: keep the wall plain, never overflow
+    used_h = rows * wh + (rows - 1) * vgap
+    y0 = 4 + (usable_h - used_h) / 2
     rng = random.Random(seed)
-    cols, ww, gap = 2, 4.5, 2
-    rh, pitch = 7, 11
-    rows = max(1, int((y1 - y0 + gap) // pitch))
-    total_h = rows * rh + (rows - 1) * (pitch - rh)
-    y_start = y0 + max(0, (y1 - y0 - total_h) / 2)
-    col_w = (x1 - x0 - gap) / cols
     out = []
     for rr in range(rows):
         for cc in range(cols):
-            x = x0 + cc * (col_w + gap)
-            y = y_start + rr * pitch
+            bx = p0[0] + m * ux + cc * (ww + gap) * ux
+            by = p0[1] + m * uy + cc * (ww + gap) * uy + y0 + rr * (wh + vgap)
+            tl = (bx, by)
+            tr = (bx + ww * ux, by + ww * uy)
+            br = (tr[0], tr[1] + wh)
+            bl = (bx, by + wh)
             if rng.random() < lit_prob:
                 fill = "#ffd76a" if rng.random() < 0.7 else "#7ee787"
-                out.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{col_w:.1f}" height="{rh}" rx="1" fill="{fill}"/>')
+                out.append("  " + poly([tl, tr, br, bl], fill))
             else:
-                out.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{col_w:.1f}" height="{rh}" rx="1" fill="#0d1117" fill-opacity="0.5"/>')
+                out.append("  " + poly([tl, tr, br, bl], "#0d1117", 0.5))
     return "".join(out)
 
 
@@ -205,8 +225,8 @@ def render(cells, streak, avg, total):
                                   (cx, cy + HH - h), (cx - HW, cy - h)], top))
         parts.append("  " + poly([ww, ss, (cx, cy + HH - h), (cx - HW, cy - h)], color))
         parts.append("  " + poly([e, ss, (cx, cy + HH - h), (cx + HW, cy - h)], shade(color, -0.25)))
-        parts.append("  " + windows(cx - HW + 3, cx - 3, cy - h + 3, cy + HH - 3, f"{date}|L"))
-        parts.append("  " + windows(cx + 3, cx + HW - 3, cy - h + 3, cy + HH - 3, f"{date}|R"))
+        parts.append("  " + windows_face((cx - HW, cy - h), (cx, cy + HH - h), h, f"{date}|L"))
+        parts.append("  " + windows_face((cx + HW, cy - h), (cx, cy + HH - h), h, f"{date}|R"))
         if tallest is not None and (wi, di) == (tallest[1], tallest[2]):
             tx, ty = cx, cy - HH - h
             antennas.append(f'  <line x1="{tx:.1f}" y1="{ty:.1f}" x2="{tx:.1f}" y2="{ty - 15:.1f}" stroke="{GRAY}" stroke-width="2"/>'

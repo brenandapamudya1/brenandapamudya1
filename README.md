@@ -18,6 +18,12 @@
 
 <div align="center">
 
+  <img src="city.svg" alt="Contributions calendar as isometric skyscraper city" width="1000"/>
+
+</div>
+
+<div align="center">
+
   <a href="https://www.youtube.com/watch?v=80xoyPca3zI">
     <img src="player.svg" alt="Now playing: Daydream by RINZO, MAHIRU" width="800"/>
   </a>

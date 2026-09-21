@@ -62,7 +62,7 @@
   </p>
 
   <p>
-    <strong>Data</strong><br/>
+    <strong>Database Management</strong><br/>
     <img src="https://img.shields.io/badge/SQL-161b22?style=for-the-badge&logoColor=white" alt="SQL"/>
     <img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white" alt="MariaDB"/>
     <img src="https://img.shields.io/badge/R_Shiny-276DC3?style=for-the-badge&logoColor=white" alt="R Shiny"/>

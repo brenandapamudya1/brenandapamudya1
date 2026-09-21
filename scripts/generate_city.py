@@ -178,7 +178,7 @@ def render(cells, streak, avg, total):
     parts.append('  <circle cx="65" cy="18" r="6" fill="#28c840"/>')
 
     # Title: calendar icon + blue link-style text.
-    parts.append(f'  <g transform="translate({pad},26)">'
+    parts.append(f'  <g transform="translate({pad},33)">'
                  f'<rect x="0" y="0" width="15" height="14" rx="2.5" fill="none" stroke="{BLUE}" stroke-width="1.6"/>'
                  f'<line x1="4" y1="-2" x2="4" y2="3" stroke="{BLUE}" stroke-width="1.6"/>'
                  f'<line x1="11" y1="-2" x2="11" y2="3" stroke="{BLUE}" stroke-width="1.6"/>'

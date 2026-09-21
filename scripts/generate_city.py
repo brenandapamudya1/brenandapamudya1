@@ -185,32 +185,32 @@ def render(cells, streak, avg, total):
                  f'<line x1="0" y1="5" x2="15" y2="5" stroke="{BLUE}" stroke-width="1.4"/>'
                  f'<text x="21" y="12" {MONO} font-size="15" fill="{BLUE}">Contributions calendar</text></g>')
 
-    # Pass 2: back-to-front cells.
+    # Pass 2: back-to-front cells. Weeks may be ragged (partial edge
+    # weeks from the API), so iterate actual cells sorted by depth key.
     antennas = []
-    W, D = len(cells), len(cells[0])
-    for s in range(W + D - 1):
-        for wi in range(W):
-            di = s - wi
-            if not (0 <= di < D):
-                continue
-            date, count, color = cells[wi][di]
-            h = Hs[wi][di]
-            cx, cy = ox + (wi - di) * HW, oy + (wi + di) * HH
-            n, e, ss, ww = (cx, cy - HH), (cx + HW, cy), (cx, cy + HH), (cx - HW, cy)
-            if not h:
-                parts.append("  " + poly([n, e, ss, ww], LOT_FILL))
-                continue
-            top = shade(color, 0.35)
-            parts.append("  " + poly([(cx, cy - HH - h), (cx + HW, cy - h),
-                                      (cx, cy + HH - h), (cx - HW, cy - h)], top))
-            parts.append("  " + poly([ww, ss, (cx, cy + HH - h), (cx - HW, cy - h)], color))
-            parts.append("  " + poly([e, ss, (cx, cy + HH - h), (cx + HW, cy - h)], shade(color, -0.25)))
-            parts.append("  " + windows(cx - HW + 3, cx - 3, cy - h + 3, cy + HH - 3, f"{date}|L"))
-            parts.append("  " + windows(cx + 3, cx + HW - 3, cy - h + 3, cy + HH - 3, f"{date}|R"))
-            if tallest is not None and (wi, di) == (tallest[1], tallest[2]):
-                tx, ty = cx, cy - HH - h
-                antennas.append(f'  <line x1="{tx:.1f}" y1="{ty:.1f}" x2="{tx:.1f}" y2="{ty - 15:.1f}" stroke="{GRAY}" stroke-width="2"/>'
-                                f'<circle cx="{tx:.1f}" cy="{ty - 16:.1f}" r="2.5" fill="#f85149"/>')
+    order = sorted(
+        ((wi, di) for wi, w in enumerate(cells) for di in range(len(w))),
+        key=lambda t: t[0] + t[1],
+    )
+    for wi, di in order:
+        date, count, color = cells[wi][di]
+        h = Hs[wi][di]
+        cx, cy = ox + (wi - di) * HW, oy + (wi + di) * HH
+        n, e, ss, ww = (cx, cy - HH), (cx + HW, cy), (cx, cy + HH), (cx - HW, cy)
+        if not h:
+            parts.append("  " + poly([n, e, ss, ww], LOT_FILL))
+            continue
+        top = shade(color, 0.35)
+        parts.append("  " + poly([(cx, cy - HH - h), (cx + HW, cy - h),
+                                  (cx, cy + HH - h), (cx - HW, cy - h)], top))
+        parts.append("  " + poly([ww, ss, (cx, cy + HH - h), (cx - HW, cy - h)], color))
+        parts.append("  " + poly([e, ss, (cx, cy + HH - h), (cx + HW, cy - h)], shade(color, -0.25)))
+        parts.append("  " + windows(cx - HW + 3, cx - 3, cy - h + 3, cy + HH - 3, f"{date}|L"))
+        parts.append("  " + windows(cx + 3, cx + HW - 3, cy - h + 3, cy + HH - 3, f"{date}|R"))
+        if tallest is not None and (wi, di) == (tallest[1], tallest[2]):
+            tx, ty = cx, cy - HH - h
+            antennas.append(f'  <line x1="{tx:.1f}" y1="{ty:.1f}" x2="{tx:.1f}" y2="{ty - 15:.1f}" stroke="{GRAY}" stroke-width="2"/>'
+                            f'<circle cx="{tx:.1f}" cy="{ty - 16:.1f}" r="2.5" fill="#f85149"/>')
     parts.extend(antennas)
 
     # Right stats panel.

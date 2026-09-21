@@ -76,12 +76,22 @@ def fetch_github_stats():
     # keep the manual baselines instead of trusting incomplete data.
     # Note: totalContributions counts all contribution types (commits + PRs
     # + issues + reviews), so it may read slightly above pure commits.
-    pat = os.environ.get("STATS_TOKEN", "")
+    pat = os.environ.get("STATS_TOKEN", "").strip()
     if pat:
+        api = "https://api.github.com/graphql"
+        gql_headers = {"Authorization": f"bearer {pat}"}  # never printed/logged
+
+        def gql(query, variables):
+            # Raises RuntimeError with the API's own error message.
+            # Never logs the token itself.
+            r = requests.post(api, json={"query": query, "variables": variables}, headers=gql_headers, timeout=30)
+            body = r.json()
+            if r.status_code != 200 or not body.get("data"):
+                raise RuntimeError(f"status={r.status_code} errors={body.get('errors', body)}")
+            return body["data"]
+
         try:
             now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-            gql_headers = {"Authorization": f"bearer {pat}"}
-            api = "https://api.github.com/graphql"
             commits_q = """
             query($login: String!, $from: DateTime!, $to: DateTime!) {
                 user(login: $login) {
@@ -90,6 +100,14 @@ def fetch_github_stats():
                     }
                 }
             }"""
+            data = gql(commits_q, {"login": GITHUB_USERNAME, "from": "2008-01-01T00:00:00Z", "to": now})
+            total = data["user"]["contributionsCollection"]["contributionCalendar"]["totalContributions"]
+            stats["commits"] = int(total)
+            print(f"   commits refresh ok: {stats['commits']}")
+        except Exception as e:
+            print(f"   commits refresh failed ({e}), keeping baseline {stats['commits']}")
+
+        try:
             repos_q = """
             query($login: String!) {
                 user(login: $login) {
@@ -97,17 +115,14 @@ def fetch_github_stats():
                     involved: repositories(ownerAffiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER]) { totalCount }
                 }
             }"""
-            cr = requests.post(api, json={"query": commits_q, "variables": {"login": GITHUB_USERNAME, "from": "2008-01-01T00:00:00Z", "to": now}}, headers=gql_headers, timeout=30)
-            total = cr.json()["data"]["user"]["contributionsCollection"]["contributionCalendar"]["totalContributions"]
-            stats["commits"] = int(total)
-            rr = requests.post(api, json={"query": repos_q, "variables": {"login": GITHUB_USERNAME}}, headers=gql_headers, timeout=30)
-            owned = rr.json()["data"]["user"]["owned"]["totalCount"]
-            involved = rr.json()["data"]["user"]["involved"]["totalCount"]
-            stats["repos_total"] = int(owned)
-            stats["repos_contrib"] = int(involved) - int(owned)
-            print(f"   GraphQL refresh ok: commits={stats['commits']}, repos={stats['repos_total']} (contrib {stats['repos_contrib']})")
+            data = gql(repos_q, {"login": GITHUB_USERNAME})
+            owned = int(data["user"]["owned"]["totalCount"])
+            involved = int(data["user"]["involved"]["totalCount"])
+            stats["repos_total"] = owned
+            stats["repos_contrib"] = involved - owned
+            print(f"   repos refresh ok: {owned} (contrib {stats['repos_contrib']})")
         except Exception as e:
-            print(f"   GraphQL refresh failed ({e}), keeping manual baselines")
+            print(f"   repos refresh failed ({e}), keeping baselines")
 
     return stats
 

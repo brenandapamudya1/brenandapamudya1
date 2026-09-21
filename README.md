@@ -18,6 +18,17 @@
 
 <div align="center">
 
+  <a href="https://www.youtube.com/watch?v=80xoyPca3zI">
+    <img src="player.svg" alt="Now playing: Daydream by RINZO, MAHIRU" width="800"/>
+  </a>
+
+  <br/>
+  <sub>🎧 Track: デイドリーム (Daydream) — RINZO, MAHIRU · Music by NoCopyrightSounds</sub>
+
+</div>
+
+<div align="center">
+
   <h3>Tech Stack</h3>
 
   <p>
@@ -60,17 +71,6 @@
     <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" alt="Git"/>
     <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black" alt="Linux"/>
   </p>
-
-</div>
-
-<div align="center">
-
-  <a href="https://www.youtube.com/watch?v=80xoyPca3zI">
-    <img src="player.svg" alt="Now playing: Daydream by RINZO, MAHIRU — klik untuk play" width="800"/>
-  </a>
-
-  <br/>
-  <sub>🎧 Track: デイドリーム (Daydream) — RINZO, MAHIRU · Music by NoCopyrightSounds · klik kartu untuk play</sub>
 
 </div>
 

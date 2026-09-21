@@ -18,7 +18,7 @@
 
 <div align="center">
 
-  <a href="./assets/daydream.mp3">
+  <a href="https://raw.githubusercontent.com/brenandapamudya1/brenandapamudya1/main/assets/daydream.mp3">
     <img src="player.svg" alt="Now playing: Daydream by RINZO, MAHIRU — klik untuk play" width="800"/>
   </a>
 

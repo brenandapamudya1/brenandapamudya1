@@ -18,14 +18,12 @@
 
 <div align="center">
 
-  <img src="player.svg" alt="Now playing: Daydream by RINZO, MAHIRU" width="800"/>
-
-  <audio controls preload="metadata">
-    <source src="./assets/daydream.mp3" type="audio/mpeg"/>
-  </audio>
+  <a href="./assets/daydream.mp3">
+    <img src="player.svg" alt="Now playing: Daydream by RINZO, MAHIRU — klik untuk play" width="800"/>
+  </a>
 
   <br/>
-  <sub>🎧 Track: デイドリーム (Daydream) — RINZO, MAHIRU · Music by NoCopyrightSounds</sub>
+  <sub>🎧 Track: デイドリーム (Daydream) — RINZO, MAHIRU · Music by NoCopyrightSounds · klik kartu untuk play</sub>
 
 </div>
 

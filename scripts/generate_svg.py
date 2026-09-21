@@ -125,7 +125,8 @@ def generate():
 
     total_lines = max(len(ascii_art), len(info_lines))
     content_height = max(len(ascii_art) * ascii_line_height, len(info_lines) * line_height)
-    svg_height = int(padding_top + content_height + padding_bottom)
+    content_top = padding_top + line_height  # room for fake prompt line
+    svg_height = int(padding_top + line_height + content_height + padding_bottom)
     svg_width = 1000
 
     bg_color = "#0d1117"
@@ -146,9 +147,18 @@ def generate():
     # Title bar label
     parts.append(f'  <text x="{svg_width // 2}" y="21" text-anchor="middle" font-family="\'SF Mono\', Consolas, monospace" font-size="12" fill="{C["gray"]}">brenandapamudya1 — README.md</text>')
 
+    # Fake terminal prompt line
+    mono_prompt = "font-family=\"'JetBrains Mono', 'Cascadia Code', 'Fira Code', 'SF Mono', Consolas, monospace\""
+    parts.append(
+        f'  <text x="{padding_x}" y="{padding_top + font_size:.1f}" xml:space="preserve" {mono_prompt} font-size="{font_size}">'
+        f'<tspan fill="{C["green"]}" font-weight="700">brenandapamudya1@github</tspan>'
+        f'<tspan fill="{C["white"]}">:~$ </tspan>'
+        f'<tspan fill="{C["white"]}">neofetch</tspan></text>'
+    )
+
     # ASCII art
     for i, line in enumerate(ascii_art):
-        y = padding_top + i * ascii_line_height + ascii_font_size
+        y = content_top + i * ascii_line_height + ascii_font_size
         parts.append(f'  <text x="{padding_x}" y="{y:.1f}" xml:space="preserve" font-family="\'JetBrains Mono\', \'Cascadia Code\', \'Fira Code\', \'SF Mono\', Consolas, monospace" font-size="{ascii_font_size}" fill="{C["cyan"]}">{escape(line)}</text>')
 
     # Info lines: label + dot leaders + value, fixed total width so all
@@ -160,7 +170,7 @@ def generate():
     for i, segments in enumerate(info_lines):
         if not segments:
             continue
-        y = padding_top + i * line_height + font_size
+        y = content_top + i * line_height + font_size
 
         # Label: value lines -> label + dots + value, values end aligned
         if len(segments) == 2:

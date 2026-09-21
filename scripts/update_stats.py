@@ -276,7 +276,8 @@ def generate_svg(stats):
     gap = 20
 
     content_height = max(len(ascii_art) * ascii_line_height, len(info_lines) * line_height)
-    svg_height = int(padding_top + content_height + padding_bottom)
+    content_top = padding_top + line_height  # room for fake prompt line
+    svg_height = int(padding_top + line_height + content_height + padding_bottom)
     svg_width = 1000
     bg_color = "#0d1117"
     border_color = "#30363d"
@@ -291,9 +292,17 @@ def generate_svg(stats):
 
     font_attr = "font-family=\"'JetBrains Mono', 'Cascadia Code', 'Fira Code', 'SF Mono', Consolas, monospace\""
 
+    # Fake terminal prompt line
+    parts.append(
+        f'  <text x="{padding_x}" y="{padding_top + font_size:.1f}" xml:space="preserve" {font_attr} font-size="{font_size}">'
+        f'<tspan fill="{C["green"]}" font-weight="700">brenandapamudya1@github</tspan>'
+        f'<tspan fill="{C["white"]}">:~$ </tspan>'
+        f'<tspan fill="{C["white"]}">neofetch</tspan></text>'
+    )
+
     # ASCII art
     for i, line in enumerate(ascii_art):
-        y = padding_top + i * ascii_line_height + ascii_font_size
+        y = content_top + i * ascii_line_height + ascii_font_size
         parts.append(f'  <text x="{padding_x}" y="{y:.1f}" xml:space="preserve" {font_attr} font-size="{ascii_font_size}" fill="{C["cyan"]}">{escape(line)}</text>')
 
     # Info: label + dot leaders + value, fixed total width so all
@@ -304,7 +313,7 @@ def generate_svg(stats):
     for i, segments in enumerate(info_lines):
         if not segments:
             continue
-        y = padding_top + i * line_height + font_size
+        y = content_top + i * line_height + font_size
 
         # Label: value lines -> label + dots + value, values end aligned
         if len(segments) == 2:

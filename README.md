@@ -16,6 +16,19 @@
 
 </div>
 
+<div align="center">
+
+  <img src="player.svg" alt="Now playing: Daydream by RINZO, MAHIRU" width="800"/>
+
+  <audio controls preload="metadata">
+    <source src="./assets/daydream.mp3" type="audio/mpeg"/>
+  </audio>
+
+  <br/>
+  <sub>🎧 Track: デイドリーム (Daydream) — RINZO, MAHIRU · Music by NoCopyrightSounds</sub>
+
+</div>
+
 <!-- GitHub Stats Cards (optional, hidden below the neofetch) -->
 <!--
 <div align="center">

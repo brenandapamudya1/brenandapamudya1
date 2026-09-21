@@ -5,6 +5,7 @@ Called by GitHub Actions workflow.
 """
 import os
 import json
+import time
 import requests
 from datetime import datetime, timezone
 
@@ -41,6 +42,9 @@ def fetch_github_stats():
         stats["repos"] = user_data.get("public_repos", 0)
         stats["followers"] = user_data.get("followers", 0)
         stats["following"] = user_data.get("following", 0)
+        account_created = user_data.get("created_at", "2008-01-01T00:00:00Z")
+    else:
+        account_created = "2008-01-01T00:00:00Z"
 
     # Fetch repos and count stars
     page = 1
@@ -86,9 +90,11 @@ def fetch_github_stats():
             # Never logs the token itself.
             r = requests.post(api, json={"query": query, "variables": variables}, headers=gql_headers, timeout=30)
             body = r.json()
-            if r.status_code != 200 or not body.get("data"):
-                raise RuntimeError(f"status={r.status_code} errors={body.get('errors', body)}")
-            return body["data"]
+            data = body.get("data") or {}
+            errors = body.get("errors")
+            if r.status_code != 200 or not data.get("user"):
+                raise RuntimeError(f"status={r.status_code} errors={errors}")
+            return data, errors
 
         try:
             now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -100,8 +106,21 @@ def fetch_github_stats():
                     }
                 }
             }"""
-            data = gql(commits_q, {"login": GITHUB_USERNAME, "from": "2008-01-01T00:00:00Z", "to": now})
-            total = data["user"]["contributionsCollection"]["contributionCalendar"]["totalContributions"]
+            # Narrow range (account creation -> now) + retries: the endpoint
+            # times out on very wide ranges, returning null for the field.
+            total = None
+            last_err = None
+            for _ in range(3):
+                data, errors = gql(commits_q, {"login": GITHUB_USERNAME, "from": account_created, "to": now})
+                node = data["user"].get("contributionsCollection")
+                if node is None:
+                    last_err = f"contributionsCollection is null; errors={errors}"
+                    time.sleep(10)
+                    continue
+                total = node["contributionCalendar"]["totalContributions"]
+                break
+            if total is None:
+                raise RuntimeError(last_err)
             stats["commits"] = int(total)
             print(f"   commits refresh ok: {stats['commits']}")
         except Exception as e:
@@ -115,9 +134,13 @@ def fetch_github_stats():
                     involved: repositories(ownerAffiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER]) { totalCount }
                 }
             }"""
-            data = gql(repos_q, {"login": GITHUB_USERNAME})
-            owned = int(data["user"]["owned"]["totalCount"])
-            involved = int(data["user"]["involved"]["totalCount"])
+            data, errors = gql(repos_q, {"login": GITHUB_USERNAME})
+            owned_node = data["user"].get("owned")
+            involved_node = data["user"].get("involved")
+            if owned_node is None or involved_node is None:
+                raise RuntimeError(f"repositories field is null; errors={errors}")
+            owned = int(owned_node["totalCount"])
+            involved = int(involved_node["totalCount"])
             stats["repos_total"] = owned
             stats["repos_contrib"] = involved - owned
             print(f"   repos refresh ok: {owned} (contrib {stats['repos_contrib']})")

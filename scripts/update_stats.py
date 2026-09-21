@@ -73,6 +73,8 @@ def fetch_github_stats():
     # Manual baselines: true values including private repos, which the
     # public API can't see. Kept unless a full-accuracy refresh succeeds.
     stats["lines_of_code"] = 70654
+    stats["lines_added"] = 1297572
+    stats["lines_deleted"] = 276272
     stats["commits"] = 388
     stats["repos_total"] = 25
     stats["repos_contrib"] = 9
@@ -152,6 +154,8 @@ def fetch_github_stats():
         try:
             ladd, ldel, lnet = compute_loc(GITHUB_USERNAME, pat, progress=print)
             stats["lines_of_code"] = int(lnet)
+            stats["lines_added"] = int(ladd)
+            stats["lines_deleted"] = int(ldel)
             print(f"   loc refresh ok: +{ladd:,} / -{ldel:,} = {lnet:,}")
         except Exception as e:
             print(f"   loc refresh failed ({e}), keeping baseline {stats['lines_of_code']:,}")
@@ -218,6 +222,7 @@ def generate_svg(stats):
         "white":  "#e6edf3",
         "gray":   "#8b949e",
         "orange": "#f0883e",
+        "red":    "#f85149",
     }
 
     # Fixed uptime (7227 days = 19 years, 9 months, 22 days).
@@ -254,6 +259,8 @@ def generate_svg(stats):
         [(C["green"], True, "Repos: "), (C["white"], False, f"{repos_str}")],
         [(C["green"], True, "Commits: "), (C["white"], False, f"{stats['commits']:,}")],
         [(C["green"], True, "Lines of Code: "), (C["white"], False, f"{stats['lines_of_code']:,}")],
+        [(C["green"], True, "Added: "), (C["green"], False, f"+{stats['lines_added']:,}")],
+        [(C["green"], True, "Deleted: "), (C["red"], False, f"-{stats['lines_deleted']:,}")],
         [],
     ]
 

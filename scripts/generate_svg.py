@@ -65,6 +65,7 @@ def generate():
         "white":  "#e6edf3",
         "gray":   "#8b949e",
         "orange": "#f0883e",
+        "red":    "#f85149",
     }
 
     info_lines = [
@@ -105,6 +106,8 @@ def generate():
         [(C["green"], True, "Repos: "), (C["white"], False, "[placeholder]")],
         [(C["green"], True, "Commits: "), (C["white"], False, "[placeholder]")],
         [(C["green"], True, "Lines of Code: "), (C["white"], False, "[placeholder]")],
+        [(C["green"], True, "Added: "), (C["green"], False, "+0")],
+        [(C["green"], True, "Deleted: "), (C["red"], False, "-0")],
         # Line 27: empty
         [],
     ]

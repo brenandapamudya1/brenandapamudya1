@@ -62,14 +62,20 @@
   </p>
 
   <p>
-    <strong>Data &amp; Web</strong><br/>
+    <strong>Data</strong><br/>
     <img src="https://img.shields.io/badge/SQL-161b22?style=for-the-badge&logoColor=white" alt="SQL"/>
     <img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white" alt="MariaDB"/>
     <img src="https://img.shields.io/badge/R_Shiny-276DC3?style=for-the-badge&logoColor=white" alt="R Shiny"/>
-    <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5"/>
-    <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3"/>
     <img src="https://img.shields.io/badge/JSON-161b22?style=for-the-badge&logoColor=white" alt="JSON"/>
     <img src="https://img.shields.io/badge/YAML-161b22?style=for-the-badge&logoColor=white" alt="YAML"/>
+  </p>
+
+  <p>
+    <strong>Web Development</strong><br/>
+    <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React"/>
+    <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel"/>
+    <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5"/>
+    <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3"/>
   </p>
 
   <p>

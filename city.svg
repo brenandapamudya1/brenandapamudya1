@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="366" viewBox="0 0 1000 366">
-  <rect width="1000" height="366" rx="12" fill="#0d1117" stroke="#30363d"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="374" viewBox="0 0 1000 374">
+  <rect width="1000" height="374" rx="12" fill="#0d1117" stroke="#30363d"/>
   <circle cx="25" cy="18" r="6" fill="#ff5f57"/>
   <circle cx="45" cy="18" r="6" fill="#febc2e"/>
   <circle cx="65" cy="18" r="6" fill="#28c840"/>
@@ -337,7 +337,8 @@
   
   
   <polygon points="483.0,325.0 500.0,333.5 483.0,342.0 466.0,333.5" fill="#c9d1d9"/>
+  <polygon points="466.0,333.5 483.0,342.0 466.0,350.5 449.0,342.0" fill="#c9d1d9"/>
   <line x1="466.0" y1="231.5" x2="466.0" y2="216.5" stroke="#8b949e" stroke-width="2"/><circle cx="466.0" cy="215.5" r="2.5" fill="#f85149"/>
-  <g transform="translate(625.0,192.5)"><path d="M8 0.5C6 3 3.5 5.5 3.5 9.5C3.5 13 5.8 15.5 8.5 15.5C11.5 15.5 13.5 13.2 13.5 10C13.5 7 11 5 10 2.5C9.3 4.5 8.5 5 8 5C8.3 3.5 8.3 2 8 0.5Z" fill="#f0883e"/><text x="22" y="13" font-family="'JetBrains Mono', 'Cascadia Code', 'Fira Code', 'SF Mono', Consolas, monospace" font-size="14" fill="#c9d1d9">Current streak <tspan font-weight="700" fill="#e6edf3">0 days</tspan></text></g>
-  <g transform="translate(625.0,228.5)"><polyline points="1,15 1,1 15,1" fill="none" stroke="#8b949e" stroke-width="1.5"/><polyline points="2,11 6,8 10,9 14,4" fill="none" stroke="#3fb950" stroke-width="1.8"/><circle cx="14" cy="4" r="2" fill="#3fb950"/><text x="22" y="13" font-family="'JetBrains Mono', 'Cascadia Code', 'Fira Code', 'SF Mono', Consolas, monospace" font-size="14" fill="#c9d1d9">~<tspan font-weight="700" fill="#e6edf3">1.43</tspan> commits per day</text></g>
+  <g transform="translate(625.0,196.8)"><path d="M8 0.5C6 3 3.5 5.5 3.5 9.5C3.5 13 5.8 15.5 8.5 15.5C11.5 15.5 13.5 13.2 13.5 10C13.5 7 11 5 10 2.5C9.3 4.5 8.5 5 8 5C8.3 3.5 8.3 2 8 0.5Z" fill="#f0883e"/><text x="22" y="13" font-family="'JetBrains Mono', 'Cascadia Code', 'Fira Code', 'SF Mono', Consolas, monospace" font-size="14" fill="#c9d1d9">Current streak <tspan font-weight="700" fill="#e6edf3">0 days</tspan></text></g>
+  <g transform="translate(625.0,232.8)"><polyline points="1,15 1,1 15,1" fill="none" stroke="#8b949e" stroke-width="1.5"/><polyline points="2,11 6,8 10,9 14,4" fill="none" stroke="#3fb950" stroke-width="1.8"/><circle cx="14" cy="4" r="2" fill="#3fb950"/><text x="22" y="13" font-family="'JetBrains Mono', 'Cascadia Code', 'Fira Code', 'SF Mono', Consolas, monospace" font-size="14" fill="#c9d1d9">~<tspan font-weight="700" fill="#e6edf3">1.42</tspan> commits per day</text></g>
 </svg>

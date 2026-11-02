@@ -31,20 +31,21 @@ jobs:
           GITHUB_USERNAME: brenandapamudya1
         run: python3 scripts/update_stats.py
 
-      - name: Generate contributions city
-        continue-on-error: true # city failure must not block the stats commit
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          STATS_TOKEN: ${{ secrets.STATS_TOKEN }}
-          GITHUB_USERNAME: brenandapamudya1
-        run: python3 scripts/generate_city.py
+      # Temporarily disabled while city.svg is hidden in README.md
+      # - name: Generate contributions city
+      #   continue-on-error: true # city failure must not block the stats commit
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     STATS_TOKEN: ${{ secrets.STATS_TOKEN }}
+      #     GITHUB_USERNAME: brenandapamudya1
+      #   run: python3 scripts/generate_city.py
       
       - name: Commit and push changes
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add neofetch.svg
-          if [ -f city.svg ]; then git add city.svg; fi
+          # if [ -f city.svg ]; then git add city.svg; fi
           if [ -d cache ]; then git add cache/; fi
           git diff --staged --quiet || git commit -m "Auto-update GitHub stats"
           git push

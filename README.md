@@ -16,12 +16,17 @@
 
 </div>
 
+<!-- Contributions City (optional, hidden) -->
+<!--
 <div align="center">
 
   <img src="city.svg" alt="Contributions calendar as isometric skyscraper city" width="1000"/>
 
 </div>
+-->
 
+<!-- Music Player (optional, hidden) -->
+<!--
 <div align="center">
 
   <a href="https://www.youtube.com/watch?v=80xoyPca3zI">
@@ -32,7 +37,10 @@
   <sub>🎧 Track: デイドリーム (Daydream) — RINZO, MAHIRU · Music by NoCopyrightSounds</sub>
 
 </div>
+-->
 
+<!-- Tech Stack (optional, hidden) -->
+<!--
 <div align="center">
 
   <h3>Tech Stack</h3>
@@ -87,6 +95,7 @@
   </p>
 
 </div>
+-->
 
 <!-- GitHub Stats Cards (optional, hidden below the neofetch) -->
 <!--

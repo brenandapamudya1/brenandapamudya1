@@ -6,10 +6,40 @@ Called by GitHub Actions workflow.
 import os
 import json
 import time
+import calendar
 import requests
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta, date
 
 from loc_counter import compute as compute_loc
+
+BIRTH_DATE = date(2006, 12, 7)
+
+
+def calculate_uptime(birth_date=BIRTH_DATE):
+    """Calculate uptime dynamically based on birth date (07 December 2006)."""
+    today = datetime.now(timezone(timedelta(hours=7))).date()
+    total_days = (today - birth_date).days
+
+    years = today.year - birth_date.year
+    months = today.month - birth_date.month
+    days = today.day - birth_date.day
+
+    if days < 0:
+        months -= 1
+        prev_month = today.month - 1 if today.month > 1 else 12
+        prev_year = today.year if today.month > 1 else today.year - 1
+        days_in_prev_month = calendar.monthrange(prev_year, prev_month)[1]
+        days += days_in_prev_month
+
+    if months < 0:
+        years -= 1
+        months += 12
+
+    y_str = f"{years} year" + ("s" if years != 1 else "")
+    m_str = f"{months} month" + ("s" if months != 1 else "")
+    d_str = f"{days} day" + ("s" if days != 1 else "")
+    cake = " 🎂" if (today.month == birth_date.month and today.day == birth_date.day) else ""
+    return f"{y_str}, {m_str}, {d_str} ({total_days} days){cake}"
 
 GITHUB_USERNAME = os.environ.get("GITHUB_USERNAME", "brenandapamudya1")
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")
@@ -240,10 +270,8 @@ def generate_svg(stats):
         "red":    "#f85149",
     }
 
-    # Fixed uptime (7227 days = 19 years, 9 months, 22 days).
-    # Hardcoded so the daily Action keeps this value instead of
-    # recomputing it from the GitHub account age.
-    uptime_str = "19 years, 9 months, 22 days (7227 days)"
+    # Dynamic uptime based on birth date (07 December 2006)
+    uptime_str = calculate_uptime()
     # Fixed repos count (manual count, includes private repos
     # invisible to the public API). Daily Action keeps this value.
     repos_str = f"{stats['repos_total']:,} (Contributed: {stats['repos_contrib']:,})"

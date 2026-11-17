@@ -38,8 +38,7 @@ def calculate_uptime(birth_date=BIRTH_DATE):
     y_str = f"{years} year" + ("s" if years != 1 else "")
     m_str = f"{months} month" + ("s" if months != 1 else "")
     d_str = f"{days} day" + ("s" if days != 1 else "")
-    cake = " 🎂" if (today.month == birth_date.month and today.day == birth_date.day) else ""
-    return f"{y_str}, {m_str}, {d_str} ({total_days} days){cake}"
+    return f"{y_str}, {m_str}, {d_str} ({total_days} days)"
 
 GITHUB_USERNAME = os.environ.get("GITHUB_USERNAME", "brenandapamudya1")
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")

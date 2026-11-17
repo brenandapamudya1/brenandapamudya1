@@ -72,12 +72,12 @@ def fetch_github_stats():
 
     # Manual baselines: true values including private repos, which the
     # public API can't see. Kept unless a full-accuracy refresh succeeds.
-    stats["lines_of_code"] = 70654
-    stats["lines_added"] = 1297572
-    stats["lines_deleted"] = 276272
-    stats["commits"] = 388
-    stats["repos_total"] = 25
-    stats["repos_contrib"] = 9
+    stats["lines_of_code"] = 1230345
+    stats["lines_added"] = 1589008
+    stats["lines_deleted"] = 358663
+    stats["commits"] = 798
+    stats["repos_total"] = 33
+    stats["repos_contrib"] = 25
 
     # Full-accuracy refresh via GraphQL, only with STATS_TOKEN (a PAT that
     # can see private repos). GITHUB_TOKEN can't, so without STATS_TOKEN we
@@ -101,30 +101,45 @@ def fetch_github_stats():
             return data, errors
 
         try:
-            now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-            commits_q = """
-            query($login: String!, $from: DateTime!, $to: DateTime!) {
+            years_q = """
+            query($login: String!) {
                 user(login: $login) {
-                    contributionsCollection(from: $from, to: $to) {
-                        contributionCalendar { totalContributions }
+                    contributionsCollection {
+                        contributionYears
                     }
                 }
             }"""
-            # Narrow range (account creation -> now) + retries: the endpoint
-            # times out on very wide ranges, returning null for the field.
-            total = None
-            last_err = None
-            for _ in range(3):
-                data, errors = gql(commits_q, {"login": GITHUB_USERNAME, "from": account_created, "to": now})
-                node = data["user"].get("contributionsCollection")
-                if node is None:
-                    last_err = f"contributionsCollection is null; errors={errors}"
-                    time.sleep(10)
-                    continue
-                total = node["contributionCalendar"]["totalContributions"]
-                break
-            if total is None:
-                raise RuntimeError(last_err)
+            data, errors = gql(years_q, {"login": GITHUB_USERNAME})
+            years = (data.get("user") or {}).get("contributionsCollection", {}).get("contributionYears", [])
+
+            if not years:
+                this_year = datetime.now(timezone.utc).year
+                years = [this_year]
+
+            subqueries = []
+            now_iso = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+            this_year = datetime.now(timezone.utc).year
+            for y in years:
+                y_from = f"{y}-01-01T00:00:00Z"
+                y_to = now_iso if y == this_year else f"{y}-12-31T23:59:59Z"
+                subqueries.append(
+                    f'y{y}: contributionsCollection(from: "{y_from}", to: "{y_to}") {{ '
+                    f'contributionCalendar {{ totalContributions }} }}'
+                )
+
+            all_years_q = f"""
+            query($login: String!) {{
+                user(login: $login) {{
+                    {' '.join(subqueries)}
+                }}
+            }}"""
+            data, errors = gql(all_years_q, {"login": GITHUB_USERNAME})
+            user_node = data.get("user") or {}
+            total = sum(
+                user_node[f"y{y}"]["contributionCalendar"]["totalContributions"]
+                for y in years
+                if f"y{y}" in user_node and user_node[f"y{y}"] and "contributionCalendar" in user_node[f"y{y}"]
+            )
             stats["commits"] = int(total)
             print(f"   commits refresh ok: {stats['commits']}")
         except Exception as e:

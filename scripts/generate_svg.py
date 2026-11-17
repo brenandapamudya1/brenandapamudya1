@@ -238,8 +238,12 @@ def generate():
         if m:
             vb = m.group(1)
             inner = m.group(2)
+            icons_width = 356
+            icons_height = 84
+            icons_x = 975 - icons_width
+            icons_y = 520
             parts.append('  <!-- Tech Stack Icons -->')
-            parts.append(f'  <svg x="{info_x}" y="510" width="410" height="96" viewBox="{vb}">')
+            parts.append(f'  <svg x="{icons_x}" y="{icons_y}" width="{icons_width}" height="{icons_height}" viewBox="{vb}">')
             parts.append(inner)
             parts.append('  </svg>')
 

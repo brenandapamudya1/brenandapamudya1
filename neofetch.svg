@@ -63,7 +63,7 @@
   <text x="460" y="483.0" xml:space="preserve" font-family="'JetBrains Mono', 'Cascadia Code', 'Fira Code', 'SF Mono', Consolas, monospace" font-size="13"><tspan fill="#3fb950" font-weight="700">Added: </tspan><tspan fill="#8b949e">.................................................</tspan><tspan fill="#3fb950">+1,589,118</tspan></text>
   <text x="460" y="500.0" xml:space="preserve" font-family="'JetBrains Mono', 'Cascadia Code', 'Fira Code', 'SF Mono', Consolas, monospace" font-size="13"><tspan fill="#3fb950" font-weight="700">Deleted: </tspan><tspan fill="#8b949e">.................................................</tspan><tspan fill="#f85149">-358,699</tspan></text>
   <!-- Tech Stack Icons -->
-  <svg x="460" y="510" width="410" height="96" viewBox="0 0 2356 556">
+  <svg x="619" y="520" width="356" height="84" viewBox="0 0 2356 556">
 
     
         <g transform="translate(0, 0)">

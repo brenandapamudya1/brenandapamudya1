@@ -379,6 +379,21 @@ def generate_svg(stats):
         text_elem += '</text>'
         parts.append(text_elem)
 
+    # Tech Stack Icons (fills the bottom right empty area below Deleted:)
+    icons_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "tech_icons.svg")
+    if os.path.exists(icons_file):
+        import re
+        with open(icons_file, "r", encoding="utf-8") as f:
+            icons_svg = f.read().strip()
+        m = re.search(r'<svg[^>]*viewBox="([^"]+)"[^>]*>(.*)</svg>', icons_svg, re.DOTALL)
+        if m:
+            vb = m.group(1)
+            inner = m.group(2)
+            parts.append('  <!-- Tech Stack Icons -->')
+            parts.append(f'  <svg x="{info_x}" y="510" width="410" height="96" viewBox="{vb}">')
+            parts.append(inner)
+            parts.append('  </svg>')
+
     parts.append('</svg>')
     return '\n'.join(parts)
 
